@@ -10,14 +10,11 @@ namespace football_predictor.Controllers
 {
     public class FixturesController : ApiController
     {
-        public IEnumerable<Fixture> GetAllFixtures()
+        public IEnumerable<Fixture> GetAllFixtures(string competition, string season)
         {
-            //FILTER: se query string to identify competition and season
-
-
-            //Fixture.GetAllFixtures
-            //return Ok()
-            return null;
+            var fixtures = Models.Fixture.GetAllFixtures(competition, season);
+            
+            return Ok(fixtures);
         }
 
     }

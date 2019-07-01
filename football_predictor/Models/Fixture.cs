@@ -27,5 +27,12 @@ namespace football_predictor.Models
             }
         }
 
+        public static IEnumerable<Fixture> GetAllFixtures(string season, string competition)
+        {
+            IEnumerable<Fixture> fixtures;
+            return fixtures;
+        }
+
+
     }
 }

@@ -27,7 +27,7 @@ namespace football_predictor.Models
         }
 
         public IEnumerable<Prediction> Predictions { get; set; }
-        public int[] Form { get; set; }
+        public Prediction[] Form { get; set; }
 
     }
 }
