@@ -13,8 +13,9 @@ namespace football_predictor.Controllers
         public IEnumerable<Fixture> GetAllFixtures(string competition, string season)
         {
             var fixtures = Models.Fixture.GetAllFixtures(competition, season);
-            
-            return Ok(fixtures);
+
+            //return Ok(fixtures);
+            return null;
         }
 
     }

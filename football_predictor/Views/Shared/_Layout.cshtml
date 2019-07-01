@@ -37,5 +37,18 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $.ajax({
+            method: 'GET',
+            url: '/api/fixtures/getallfixtures?competition=testcompetition&season=testseason',
+            success: function () {
+
+            },
+            error: function () {
+
+            }
+        });
+    </script>
 </body>
 </html>
