@@ -7,18 +7,14 @@ namespace football_predictor.Models
 {
     public class Player
     {
-        public User user { get; set; }
-        public Competition competition { get; set; }
-        public Season season { get; set; }
-
-        /// <summary>
-        /// Total number of points for the season
-        /// </summary>
-        public int points {
+        private User user;
+        private Competition competition;
+        private Season season;
+        public int Points {
             get
             {
                 int totalPoints = 0;
-                foreach (Prediction prediction in Predictions)
+                foreach (Prediction prediction in predictions)
                 {
                     totalPoints += prediction.Points;
                 }
@@ -26,8 +22,8 @@ namespace football_predictor.Models
             }
         }
 
-        public IEnumerable<Prediction> Predictions { get; set; }
-        public Prediction[] Form { get; set; }
+        private IEnumerable<Prediction> predictions;
+        private Prediction[] form;
 
     }
 }

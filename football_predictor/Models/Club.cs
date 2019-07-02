@@ -7,11 +7,7 @@ namespace football_predictor.Models
 {
     public class Club
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string League { get; set; }
-        
-        
-
+        private int id;
+        private string name;
     }
 }

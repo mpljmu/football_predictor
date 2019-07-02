@@ -7,9 +7,9 @@ namespace football_predictor.Models
 {
     public class Season
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        private int id;
+        private string name;
+        private DateTime startDate;
+        private DateTime endDate;
     }
 }

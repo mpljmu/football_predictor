@@ -7,9 +7,9 @@ namespace football_predictor.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        private string Hash { get; set; }
+        private int id;
+        private string name;
+        private string hash;
         
     }
 }

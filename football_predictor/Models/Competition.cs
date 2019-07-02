@@ -7,8 +7,8 @@ namespace football_predictor.Models
 {
     public class Competition
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        private int id;
+        private string name;
         
     }
 }
