@@ -39,9 +39,14 @@
     @RenderSection("scripts", required: false)
 
     <script type="text/javascript">
+        let fixture = {
+            id: 12
+        }
         $.ajax({
-            method: 'GET',
-            url: '/api/fixtures/getallfixtures?competition=testcompetition&season=testseason',
+            method: 'PUT',
+            url: '/api/fixtures',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(fixture),
             success: function () {
 
             },

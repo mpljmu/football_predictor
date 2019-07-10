@@ -7,14 +7,14 @@ namespace football_predictor.Models
 {
     public class Player
     {
-        private User user;
-        private Competition competition;
-        private Season season;
+        private User _user;
+        private Competition _competition;
+        private Season _season;
         public int Points {
             get
             {
                 int totalPoints = 0;
-                foreach (Prediction prediction in predictions)
+                foreach (Prediction prediction in _predictions)
                 {
                     totalPoints += prediction.Points;
                 }
@@ -22,8 +22,8 @@ namespace football_predictor.Models
             }
         }
 
-        private IEnumerable<Prediction> predictions;
-        private Prediction[] form;
+        private IEnumerable<Prediction> _predictions;
+        private Prediction[] _form;
 
     }
 }

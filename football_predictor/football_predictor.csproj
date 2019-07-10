@@ -163,6 +163,7 @@
     </Compile>
     <Compile Include="Models\Club.cs" />
     <Compile Include="Models\Competition.cs" />
+    <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\Fixture.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Prediction.cs" />
@@ -200,6 +201,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

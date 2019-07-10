@@ -18,5 +18,20 @@ namespace football_predictor.Controllers
             return null;
         }
 
+        public IHttpActionResult Put(Fixture fixture)
+        {
+            // update the fixture in the database
+            try
+            {
+                fixture.UpdateFixture();
+            }
+            catch(Exception ex)
+            {
+                //return InternalServerErrorResult();
+            }
+          
+            return Ok();
+        }
+
     }
 }
