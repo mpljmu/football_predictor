@@ -38,7 +38,9 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
+    
     <script type="text/javascript">
+        /*
         let fixture = {
             id: 12
         }
@@ -54,6 +56,17 @@
 
             }
         });
+        */
+        $.ajax({
+            method: 'GET',
+            url: '/api/fixtures/GetAllFixtures?competition=a&season=b',
+            success: function (fixtures) {
+                console.log(fixtures[10].Id);
+            },
+            error: function () {
+
+            }
+        })
     </script>
 </body>
 </html>

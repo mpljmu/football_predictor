@@ -15,7 +15,7 @@ namespace football_predictor.Controllers
             var fixtures = Models.Fixture.GetAllFixtures(competition, season);
 
             //return Ok(fixtures);
-            return null;
+            return fixtures;
         }
 
         public IHttpActionResult Put(Fixture fixture)

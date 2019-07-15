@@ -11,17 +11,14 @@ namespace football_predictor.Models
     public class Connection
     {
 
-        private static string _liveConnectionName = ConfigurationManager.ConnectionStrings["Live"].ConnectionString;
-        private static SqlConnection _liveConnection = new SqlConnection(_liveConnectionName);
-        private static SqlCommand _storedProcedure;
+        private static string _databaseConnection = ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
 
-        public static SqlConnection LiveConnection
+        public static SqlConnection DatabaseConnection
         {
             get
             {
-                return _liveConnection;
+                return new SqlConnection(_databaseConnection);
             }
         }
-
     }
 }

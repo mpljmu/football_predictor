@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using Dapper;
 
 namespace football_predictor.Models
 {
@@ -37,6 +38,11 @@ namespace football_predictor.Models
             }
         }
 
+        public Fixture(int fixtureID)
+        {
+            Id = fixtureID;
+        }
+
         public Fixture(int id, Club homeClub, Club awayClub, DateTime date, int? homeGoals, int? awayGoals)
         {
             Id = id;
@@ -49,8 +55,8 @@ namespace football_predictor.Models
         
         public void UpdateFixture()
         {
-            SqlConnection sqlConnection = Connection.LiveConnection;
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM tblFixture");
+            SqlConnection sqlConnection = Connection.DatabaseConnection;
+            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM tblFixture", sqlConnection);
 
             using(sqlConnection)
             {
@@ -73,8 +79,14 @@ namespace football_predictor.Models
         public static IEnumerable<Fixture> GetAllFixtures(string season, string competition)
         {
 
-            return null;
+            SqlConnection sqlConnection = Connection.DatabaseConnection;
+            using (sqlConnection) {
+                sqlConnection.Open();
+                return sqlConnection.Query<Fixture>
+                ("SELECT fixtureID FROM tblFixture").ToList();
+            }
         }
+
         /// <summary>
         /// Calculate the amount of points generated for a prediction
         /// </summary>
