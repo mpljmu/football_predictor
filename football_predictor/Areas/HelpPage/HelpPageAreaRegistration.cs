@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace football_predictor.Areas.HelpPage
+namespace FootballPredictor.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

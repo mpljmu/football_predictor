@@ -59,7 +59,7 @@
         */
         $.ajax({
             method: 'GET',
-            url: '/api/fixtures/GetAllFixtures?competition=a&season=b',
+            url: '/api/fixtures/GetAllFixtures?season=b',
             success: function (fixtures) {
                 console.log(fixtures[10].Id);
             },
@@ -67,6 +67,7 @@
 
             }
         })
+        
     </script>
 </body>
 </html>

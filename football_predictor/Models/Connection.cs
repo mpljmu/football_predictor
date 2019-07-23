@@ -5,20 +5,49 @@ using System.Web;
 using System.Web.Configuration;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Data;
 
-namespace football_predictor.Models
+namespace FootballPredictor.Models
 {
     public class Connection
     {
 
-        private static string _databaseConnection = ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+    }
 
-        public static SqlConnection DatabaseConnection
-        {
+    public class DatabaseConnection : Connection
+    {
+        /*
+         * Use these variables to indicate which database implementation the application will use i.e. SqlConnection for SqlServer
+         */
+        private SqlConnection _databaseConnection = new SqlConnection();
+        private SqlCommand _databaseCommand = new SqlCommand();
+
+        private IDbConnection _connection;
+        public IDbConnection Connection {
             get
             {
-                return new SqlConnection(_databaseConnection);
+                return _connection;
+            }
+            private set
+            {
+                value.ConnectionString = ConfigurationManager.ConnectionStrings["DatabaseConnection"].ConnectionString;
+                _connection = value;
             }
         }
+        public IDbCommand Command { get; }
+        public DatabaseConnection()
+        {
+            Connection = _databaseConnection;
+        }
+
+        public DatabaseConnection(string commandText)
+        {
+            Connection = _databaseConnection;
+            _databaseCommand.CommandText = commandText;
+            Command = _databaseCommand;
+        }
+
+
     }
+
 }

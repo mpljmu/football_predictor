@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Dapper;
 
-namespace football_predictor.Models
+namespace FootballPredictor.Models
 {
     public class Competition
     {
         private int id;
         private string name;
-        
+
     }
 }

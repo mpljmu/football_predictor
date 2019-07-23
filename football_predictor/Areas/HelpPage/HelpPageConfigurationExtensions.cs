@@ -11,10 +11,10 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using football_predictor.Areas.HelpPage.ModelDescriptions;
-using football_predictor.Areas.HelpPage.Models;
+using FootballPredictor.Areas.HelpPage.ModelDescriptions;
+using FootballPredictor.Areas.HelpPage.Models;
 
-namespace football_predictor.Areas.HelpPage
+namespace FootballPredictor.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

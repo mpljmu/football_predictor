@@ -1,4 +1,4 @@
-namespace football_predictor.Areas.HelpPage.ModelDescriptions
+namespace FootballPredictor.Areas.HelpPage.ModelDescriptions
 {
     public class KeyValuePairModelDescription : ModelDescription
     {

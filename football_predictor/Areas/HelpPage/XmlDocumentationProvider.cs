@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Xml.XPath;
-using football_predictor.Areas.HelpPage.ModelDescriptions;
+using FootballPredictor.Areas.HelpPage.ModelDescriptions;
 
-namespace football_predictor.Areas.HelpPage
+namespace FootballPredictor.Areas.HelpPage
 {
     /// <summary>
     /// A custom <see cref="IDocumentationProvider"/> that reads the API documentation from an XML documentation file.

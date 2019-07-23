@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace football_predictor.Models
+namespace FootballPredictor.Models
 {
     public class User
     {

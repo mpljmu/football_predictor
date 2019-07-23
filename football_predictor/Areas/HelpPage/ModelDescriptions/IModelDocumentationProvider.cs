@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace football_predictor.Areas.HelpPage.ModelDescriptions
+namespace FootballPredictor.Areas.HelpPage.ModelDescriptions
 {
     public interface IModelDocumentationProvider
     {

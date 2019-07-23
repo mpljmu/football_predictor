@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace football_predictor.Models
+namespace FootballPredictor.Models
 {
     public class Club
     {
-        private int id;
-        private string name;
+        public int Id { get; private set; }
+        public string Name { get; private set; }
+
+        public Club()
+        {
+
+        }
+
+        public Club(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
     }
 }

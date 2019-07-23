@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace football_predictor
+namespace FootballPredictor
 {
     public class BundleConfig
     {

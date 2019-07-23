@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
-using football_predictor.Areas.HelpPage.ModelDescriptions;
+using FootballPredictor.Areas.HelpPage.ModelDescriptions;
 
-namespace football_predictor.Areas.HelpPage.Models
+namespace FootballPredictor.Areas.HelpPage.Models
 {
     /// <summary>
     /// The model that represents an API displayed on the help page.

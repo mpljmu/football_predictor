@@ -4,36 +4,40 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using FootballPredictor.Models;
 
 namespace FootballPredictor.Controllers
 {
-    public class ValuesController : ApiController
+    public class CompetitionsController : ApiController
     {
-        // GET api/values
+
+        // GET: api/Competitions
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
+        // GET: api/Competitions/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/values
+        // POST: api/Competitions
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
+        // PUT: api/Competitions/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE: api/Competitions/5
         public void Delete(int id)
         {
         }
+
+
     }
 }

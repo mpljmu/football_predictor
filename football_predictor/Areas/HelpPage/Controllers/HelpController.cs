@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using football_predictor.Areas.HelpPage.ModelDescriptions;
-using football_predictor.Areas.HelpPage.Models;
+using FootballPredictor.Areas.HelpPage.ModelDescriptions;
+using FootballPredictor.Areas.HelpPage.Models;
 
-namespace football_predictor.Areas.HelpPage.Controllers
+namespace FootballPredictor.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace football_predictor.Areas.HelpPage.ModelDescriptions
+namespace FootballPredictor.Areas.HelpPage.ModelDescriptions
 {
     public class ComplexTypeModelDescription : ModelDescription
     {

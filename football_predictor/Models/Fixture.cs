@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using Dapper;
 
-namespace football_predictor.Models
+namespace FootballPredictor.Models
 {
     public class Fixture
     {
@@ -18,94 +18,54 @@ namespace football_predictor.Models
             Incorrect = 0
         }
 
-        public int Id { get; }
-        private Club _homeClub;
+        public int Id { get; private set; }
+        public Club HomeClub { get; set; }
         private Club _awayClub;
         private DateTime _date;
-        private int? _homeGoals;
-        private int? _awayGoals;
-        public string Score {
-            get
-            {
-                if (_homeGoals != null && _awayGoals != null)
-                {
-                    return string.Format("{0}-{1}", _homeGoals, _awayGoals);
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
-        }
+        private FixtureScore _score;
 
-        public Fixture(int fixtureID)
-        {
-            Id = fixtureID;
-        }
-
-        public Fixture(int id, Club homeClub, Club awayClub, DateTime date, int? homeGoals, int? awayGoals)
+        public Fixture(int id)
         {
             Id = id;
-            _homeClub = homeClub;
+        }
+
+        public Fixture(int id, Club homeClub, Club awayClub, DateTime date, FixtureScore score)
+        {
+            Id = id;
+            HomeClub = homeClub;
             _awayClub = awayClub;
             _date = date;
-            _homeGoals = homeGoals;
-            _awayGoals = awayGoals;
+            _score = score;
         }
         
         public void UpdateFixture()
         {
-            SqlConnection sqlConnection = Connection.DatabaseConnection;
-            SqlCommand sqlCommand = new SqlCommand("SELECT * FROM tblFixture", sqlConnection);
-
-            using(sqlConnection)
+            try
             {
-                sqlConnection.Open();
-                SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                DataTable result = new DataTable();
-                if (sqlDataReader.HasRows)
+                string query = "SELECT * FROM tblFixture";
+                using (var connection = new DatabaseConnection(query).Connection)
                 {
-                    result.Load(sqlDataReader);
-                };
+                    connection.Open();
 
+                }
+            } catch
+            {
 
             }
-                
-
-            //SqlCommand sqlCommand = new SqlCommand("UPDATE tblFixture")
-            // Connect to the database and set the value
         }
-
-        public static IEnumerable<Fixture> GetAllFixtures(string season, string competition)
-        {
-
-            SqlConnection sqlConnection = Connection.DatabaseConnection;
-            using (sqlConnection) {
-                sqlConnection.Open();
-                return sqlConnection.Query<Fixture>
-                ("SELECT fixtureID FROM tblFixture").ToList();
-            }
-        }
-
-        /// <summary>
-        /// Calculate the amount of points generated for a prediction
-        /// </summary>
-        /// <param name="homeGoals"></param>
-        /// <param name="awayGoals"></param>
-        /// <returns></returns>
         public int CalculatePredictionPoints(int homeGoals, int awayGoals)
         {
-            if (homeGoals == _homeGoals && awayGoals == _awayGoals)
+            if (homeGoals == _score.HomeGoals && awayGoals == _score.AwayGoals)
             {
                 return (int)Points.CorrectScore;
             }
-            else if (homeGoals == awayGoals && _homeGoals == _awayGoals)
+            else if (homeGoals == awayGoals && _score.HomeGoals == _score.AwayGoals)
             {
                 return (int)Points.CorrectOutcome;
             }
             else if (
-                (homeGoals > awayGoals && _homeGoals > _awayGoals)
-                || (awayGoals < homeGoals && _awayGoals < _homeGoals)
+                (homeGoals > awayGoals && _score.HomeGoals > _score.AwayGoals)
+                || (awayGoals < homeGoals && _score.AwayGoals < _score.HomeGoals)
             )
             {
                 return (int)Points.CorrectOutcome;
@@ -117,4 +77,24 @@ namespace football_predictor.Models
         }
 
     }
+
+    public class FixtureScore
+    {
+        public int HomeGoals { get;  }
+        public int AwayGoals { get;  }
+        public string Score
+        {
+            get
+            {
+                return string.Format("{0}-{1}", HomeGoals, AwayGoals);
+            }
+        }
+
+        public FixtureScore(int homeGoals, int awayGoals)
+        {
+            HomeGoals = homeGoals;
+            AwayGoals = awayGoals;
+        }
+    }
+
 }

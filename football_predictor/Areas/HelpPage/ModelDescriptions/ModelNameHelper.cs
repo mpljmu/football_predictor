@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace football_predictor.Areas.HelpPage.ModelDescriptions
+namespace FootballPredictor.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {

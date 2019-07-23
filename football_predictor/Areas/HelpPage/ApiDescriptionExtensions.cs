@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace football_predictor.Areas.HelpPage
+namespace FootballPredictor.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {
