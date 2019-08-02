@@ -49,9 +49,13 @@
       <HintPath>..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -158,23 +162,30 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\Clubs\ClubsController.cs" />
     <Compile Include="Controllers\CompetitionsController.cs" />
     <Compile Include="Controllers\CompetitionSeasonController.cs" />
+    <Compile Include="Controllers\Competitions\PredictionsController.cs" />
     <Compile Include="Controllers\FixturesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Club.cs" />
-    <Compile Include="Models\Competition.cs" />
-    <Compile Include="Models\CompetitionSeason.cs" />
-    <Compile Include="Models\Connection.cs" />
-    <Compile Include="Models\Fixture.cs" />
-    <Compile Include="Models\Player.cs" />
-    <Compile Include="Models\Prediction.cs" />
-    <Compile Include="Models\Season.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Clubs\Club.cs" />
+    <Compile Include="Models\Competitions\Competition.cs" />
+    <Compile Include="Models\Competitions\CompetitionSeason.cs" />
+    <Compile Include="Models\Connections\Connection.cs" />
+    <Compile Include="Models\Connections\DatabaseConnection.cs" />
+    <Compile Include="Models\Connections\IDatabaseConnection.cs" />
+    <Compile Include="Models\Connections\SqlServerDatabaseConnection.cs" />
+    <Compile Include="Models\Competitions\Fixture.cs" />
+    <Compile Include="Models\Ninject\Bindings.cs" />
+    <Compile Include="Models\People\Person.cs" />
+    <Compile Include="Models\Competitions\Player.cs" />
+    <Compile Include="Models\Competitions\Prediction.cs" />
+    <Compile Include="Models\Competitions\Season.cs" />
+    <Compile Include="Models\People\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +219,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

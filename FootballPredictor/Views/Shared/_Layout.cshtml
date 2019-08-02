@@ -40,26 +40,10 @@
 
     
     <script type="text/javascript">
-        /*
-        let fixture = {
-            id: 12
-        }
-        $.ajax({
-            method: 'PUT',
-            url: '/api/fixtures',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(fixture),
-            success: function () {
-
-            },
-            error: function () {
-
-            }
-        });
-        */
+        
         $.ajax({
             method: 'GET',
-            url: '/api/fixtures/GetAllFixtures?season=b',
+            url: '/api/fixtures/GetFixtures?competitionId=16',
             success: function (fixtures) {
                 console.log(fixtures[10].Id);
             },

@@ -26,5 +26,13 @@ namespace FootballPredictor.Controllers
             return Ok();
         }
 
+        public IHttpActionResult GetFixtures(int competitionId) // also needs the season
+        {
+            var competitionSeason = new CompetitionSeason(competitionId);
+            var fixtures = competitionSeason.GetFixtures();
+            return Ok();
+        }
+
+
     }
 }

@@ -10,11 +10,14 @@ namespace FootballPredictor.Controllers
 {
     public class CompetitionSeasonController : ApiController
     {
-        public IEnumerable<Fixture> GetFixtures(int id)
+
+        // this needs to be moved to the players controller
+        public IHttpActionResult GetPlayers(int id)
         {
+            // 16 is the current season id
             var competitionSeason = new CompetitionSeason(id);
-            var fixtures = competitionSeason.GetFixtures();
-            return fixtures;
+            var players = competitionSeason.GetPlayers();
+            return Ok();
         }
 
     }

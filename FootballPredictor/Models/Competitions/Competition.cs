@@ -4,12 +4,12 @@ using System.Linq;
 using System.Web;
 using Dapper;
 
-namespace FootballPredictor.Models
+namespace FootballPredictor.Models.Competitions
 {
     public class Competition
     {
-        private int id;
-        private string name;
+        public int Id { get; private set; }
+        private string Name { get; set; }
 
     }
 }
