@@ -6,11 +6,11 @@ using Dapper;
 
 namespace FootballPredictor.Models.Competitions
 {
-    public class CompetitionSeason
+    public class CompetitionSeason : ICompetitionSeason
     {
-        private int Id { get; set; }
-        private Competition Competition { get; set; }
-        private Season Season { get; set; }
+        public int Id { get; set; }
+        public Competition Competition { get; private set; }
+        public Season Season { get; private set; }
 
         public CompetitionSeason(int id)
         {
@@ -49,7 +49,6 @@ namespace FootballPredictor.Models.Competitions
             }
             return fixtures;
         }
-
         public IEnumerable<Player> GetPlayers()
         {
 
@@ -64,7 +63,8 @@ namespace FootballPredictor.Models.Competitions
                           FROM vwPlayerCompetition
                           WHERE CompetitionId = @CompetitionId AND SeasonName = @SeasonName"
                         ),
-                        new {
+                        new
+                        {
                             CompetitionId = Competition.Id,
                             SeasonName = Season.Id
                         }
@@ -79,7 +79,6 @@ namespace FootballPredictor.Models.Competitions
             }
             return new List<Player>();
         }
-
         public void AddPlayer(int playerId)
         {
             // TO DO

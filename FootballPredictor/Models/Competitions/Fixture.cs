@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using Dapper;
+using FootballPredictor.Models.Clubs;
 
 namespace FootballPredictor.Models.Competitions
 {
@@ -19,17 +20,17 @@ namespace FootballPredictor.Models.Competitions
         }
 
         public int Id { get; private set; }
-        private Club HomeClub { get; set; }
-        private Club AwayClub {get; set;}
+        public IClub HomeClub { get; private set; }
+        public IClub AwayClub {get; set;}
         public DateTime Date { get; private set; }
         private FixtureScore Score { get; set; }
 
-        public Fixture(int id, DateTime date)
+
+        public Fixture(int id)
         {
             Id = id;
         }
-
-        public Fixture(int id, Club homeClub, Club awayClub, DateTime date, FixtureScore score)
+        public Fixture(int id, IClub homeClub, IClub awayClub, DateTime date, FixtureScore score)
         {
             Id = id;
             HomeClub = homeClub;
@@ -38,34 +39,35 @@ namespace FootballPredictor.Models.Competitions
             Score = score;
         }
         
-        public void UpdateFixture()
+
+        public void UpdateScore()
         {
             try
             {
-                //string query = "SELECT * FROM tblFixture";
-                //using (var connection = new DatabaseConnection(query).Connection)
-                //{
-                //    connection.Open();
-
-                //}
+                
             } catch
             {
 
             }
         }
-        public int CalculatePredictionPoints(int homeGoals, int awayGoals)
+        public void UpdateDate()
         {
-            if (homeGoals == Score.HomeGoals && awayGoals == Score.AwayGoals)
+
+        }
+        public int CalculatePredictionPoints(PredictionScore predictionScore)
+        {
+            if (Score.HomeGoals == predictionScore.HomeGoals && Score.AwayGoals == predictionScore.AwayGoals)
             {
                 return (int)Points.CorrectScore;
             }
-            else if (homeGoals == awayGoals && Score.HomeGoals == Score.AwayGoals)
+            else if (Score.HomeGoals == Score.AwayGoals && predictionScore.HomeGoals == predictionScore.AwayGoals)
             {
+                // Correctly guessed a draw
                 return (int)Points.CorrectOutcome;
             }
             else if (
-                (homeGoals > awayGoals && Score.HomeGoals > Score.AwayGoals)
-                || (awayGoals < homeGoals && Score.AwayGoals < Score.HomeGoals)
+                (Score.HomeGoals > Score.AwayGoals && predictionScore.HomeGoals > predictionScore.AwayGoals)
+                || (Score.AwayGoals < Score.HomeGoals && predictionScore.AwayGoals < predictionScore.HomeGoals)
             )
             {
                 return (int)Points.CorrectOutcome;
@@ -75,27 +77,5 @@ namespace FootballPredictor.Models.Competitions
                 return (int)Points.Incorrect;
             }
         }
-
     }
-
-    public class FixtureScore
-    {
-        public byte HomeGoals { get; private set; }
-        public byte AwayGoals { get; private set; }
-        public string Score
-        {
-            get
-            {
-                return string.Format("{0}-{1}", HomeGoals, AwayGoals);
-            }
-        }
-
-        public FixtureScore(byte homeGoals, byte awayGoals)
-        {
-            HomeGoals = homeGoals;
-            AwayGoals = awayGoals;
-        }
-
-    }
-
 }

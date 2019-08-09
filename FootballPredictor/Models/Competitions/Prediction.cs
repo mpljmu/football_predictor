@@ -5,18 +5,20 @@ using System.Linq;
 using System.Web;
 using FootballPredictor.Models.Connections;
 using FootballPredictor.Models.People;
+using FootballPredictor.Models.Loggers;
 using Dapper;
 using System.Transactions;
+using Ninject;
+using FootballPredictor.App_Start;
 
 namespace FootballPredictor.Models.Competitions
 {
-    public class Prediction
+    public class Prediction : IPrediction
     {
         public int Id { get; }
-        public User User { get; private set; }
-        public Fixture Fixture { get; private set; }
-        public int HomeGoals { get; private set; }
-        public int AwayGoals { get; private set; }
+        public IPlayer User { get; private set; }
+        public IFixture Fixture { get; private set; }
+        public PredictionScore Score { get; private set; }
         public int Points
         {
             get
@@ -24,38 +26,89 @@ namespace FootballPredictor.Models.Competitions
                 return Fixture.CalculatePredictionPoints(HomeGoals, AwayGoals);
             }
         }
-        public IDatabaseConnection DatabaseConnection { get; set; }
+        [Inject]
+        public IDatabaseConnection DatabaseConnection { private get; set; }
+        [Inject]
+        public ILogger Logger { private get; set; }
 
 
-        public Prediction(int id, IDatabaseConnection databaseConnection)
+        public Prediction(int id)
         {
             Id = id;
-            DatabaseConnection = databaseConnection;
+            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
         }
-        public Prediction(int id, User user, Fixture fixture, int homeGoals, int awayGoals)
+        public Prediction(int id, PredictionScore score)
         {
             Id = id;
-            User = user;
-            Fixture = fixture;
-            HomeGoals = homeGoals;
-            AwayGoals = awayGoals;
+            Score = score;
+            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
         }
 
 
-        public void PopulateObject()
+        public IPrediction GetFromDatabase<T>()
         {
-            DatabaseConnection.Command.CommandText = 
-                @"SELECT *
-                  FROM [Use a view for the prediction]"
+            IPrediction prediction = DatabaseConnection.Connection.Query<Prediction, Player, Fixture, Prediction>
+            (
+                @"SELECT
+	                Prediction.Id,
+	                HomeGoals,
+	                AwayGoals,
+	                SubmittedOn,
+	                PlayerId,
+	                FixtureId
+                  FROM
+		                Prediction
+	                INNER JOIN Player
+		                ON Prediction.PlayerId = Player.Id
+	                INNER JOIN [User]
+		                ON Player.UserId = [User].Id
+                  WHERE
+	                Prediction.Id = @Id",
+                (thisPrediction, thisUser, thisFixture) =>
+                {
+                    thisPrediction.User = thisUser;
+                    thisPrediction.Fixture = thisFixture;
+                    return thisPrediction;
+                },
+                new
+                {
+                    Id = Id
+                },
+                splitOn:""
+            ).FirstOrDefault();
+            return prediction;
         }
-        public void InsertPrediction()
+
+        public void Insert()
         {
             
-            // insert prediction in to the database
         }
-        public void UpdatePrediction()
+        public void UpdateScore(int homeGoals, int awayGoals, Player player)
         {
-            // update the goals for a prediction - use the internal id
+            try
+            {
+                using (DatabaseConnection.Connection)
+                {
+                    DatabaseConnection.Command.CommandText =
+                        @"UPDATE tblPrediction (homeGoals, awayGoals)
+                          VALUES (@HomeGoals, @AwayGoals)
+                          WHERE PredictionId = @PredictionId";
+                    DatabaseConnection.Connection.Execute(
+                        DatabaseConnection.Command.CommandText,
+                        new
+                        {
+                            HomeGoals = homeGoals,
+                            AwayGoals = awayGoals,
+                            PredictionId = Id
+                        }
+                    );
+                }
+                Logger.Insert(String.Format("Update prediction score. New score {0}-{1}", HomeGoals, AwayGoals), "Prediction", Id, Logger.Category.Success, DateTime.Now, player.User.Id);
+            }
+            catch (Exception ex)
+            {
+                Logger.Insert(ex.Message, "Prediction", Id, Logger.Category.Error, DateTime.Now, player.User.Id);
+            }
         }
 
     }

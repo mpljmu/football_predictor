@@ -6,7 +6,7 @@ using FootballPredictor.Models.Connections;
 
 namespace FootballPredictor.Models.Clubs
 {
-    public class Club
+    public class Club : IClub
     {
         public int Id { get; private set; }
         public string Name { get; private set; }

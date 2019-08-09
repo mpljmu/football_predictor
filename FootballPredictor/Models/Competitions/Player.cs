@@ -6,12 +6,13 @@ using FootballPredictor.Models.People;
 
 namespace FootballPredictor.Models.Competitions
 {
-    public class Player
+    public class Player : IPlayer
     {
-        public User User { get; private set; }
-        public Competition Competition { get; private set; }
-        public Season Season { get; private set; }
-        public int Points {
+        public int Id { get; set; }
+        public IUser User { get; private set; }
+        public ICompetitionSeason CompetitionSeason { get; private set; }
+        public int Points
+        {
             get
             {
                 int totalPoints = 0;
@@ -23,9 +24,15 @@ namespace FootballPredictor.Models.Competitions
             }
         }
         public IEnumerable<Prediction> Predictions { get; private set; }
-        private Prediction[] Form { get; }
+        public ICompetition Competition => throw new NotImplementedException();
+        public ISeason Season => throw new NotImplementedException();
+        private IPrediction[] Form { get; }
+        IEnumerable<IPrediction> IPlayer.Predictions { get; }
 
 
-
+        public Player(int id)
+        {
+            Id = id;
+        }
     }
 }

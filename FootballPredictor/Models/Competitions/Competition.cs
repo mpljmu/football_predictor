@@ -6,10 +6,10 @@ using Dapper;
 
 namespace FootballPredictor.Models.Competitions
 {
-    public class Competition
+    public class Competition : ICompetition
     {
         public int Id { get; private set; }
-        private string Name { get; set; }
+        public string Name { get; private set; }
 
     }
 }

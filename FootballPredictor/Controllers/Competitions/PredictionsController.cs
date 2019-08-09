@@ -1,5 +1,6 @@
 ﻿using FootballPredictor.Models.Competitions;
 using FootballPredictor.Models.Connections;
+using FootballPredictor.Models.Loggers;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -13,41 +14,45 @@ namespace FootballPredictor.Controllers.Competitions
 {
     public class PredictionsController : ApiController
     {
-        private IKernel Kernel = new StandardKernel();
-        private IDatabaseConnection DatabaseConnection
+        private IDatabaseConnection DatabaseConnection { get; set; }
+        private ILogger Logger { get; set; }
+        private IPlayer Player { get; set; }
+
+
+        public PredictionsController(IDatabaseConnection databaseConnection, ILogger logger, IPlayer player)
         {
-            get
-            {
-                Kernel.Load(Assembly.GetExecutingAssembly());
-                return Kernel.Get<IDatabaseConnection>();
-            }
+            DatabaseConnection = databaseConnection;
+            Logger = logger;
         }
 
-        // GET: api/Predictions
-        public IEnumerable<string> Get()
+        public IEnumerable<string> Get(string competitionId, string season)
         {
-            return new string[] { "value1", "value2" };
+            return new List<string>();
         }
-
-        // GET: api/Predictions/5
         public Prediction Get(int id)
         {
-            var prediction = new Prediction(id, DatabaseConnection);
+            var prediction = new Prediction(id, DatabaseConnection, Logger);
             prediction.PopulateObject();
             return prediction;
         }
-
-        // POST: api/Predictions
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Prediction prediction)
         {
-        }
 
-        // PUT: api/Predictions/5
-        public void Put(int id, [FromBody]string value)
+        }
+        public IHttpActionResult PutScore(int id, [FromBody]int homeGoals, int awayGoals)
         {
+            try
+            {
+                var prediction = new Prediction(id, DatabaseConnection, Logger);
+                prediction.UpdateScore(homeGoals, awayGoals, );
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+                // TODO
+            }
         }
-
-        // DELETE: api/Predictions/5
         public void Delete(int id)
         {
         }
