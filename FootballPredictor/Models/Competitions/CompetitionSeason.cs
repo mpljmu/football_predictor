@@ -3,21 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Dapper;
+using FootballPredictor.App_Start;
+using FootballPredictor.Models.Clubs;
+using FootballPredictor.Models.Connections;
+using FootballPredictor.Models.People;
+using FootballPredictor.Models.Predictions;
+using Ninject;
 
 namespace FootballPredictor.Models.Competitions
 {
     public class CompetitionSeason : ICompetitionSeason
     {
         public int Id { get; set; }
-        public Competition Competition { get; private set; }
-        public Season Season { get; private set; }
+        public ICompetition Competition { get; private set; }
+        public ISeason Season { get; private set; }
+        public IEnumerable<IPlayer> Players { get; private set; }
+        private int CorrectOutcomePoints
+        {
+            get
+            {
+                return 1;
+            }
+        }
+        private int CorrectScorePoints
+        {
+            get
+            {
+                return 1;
+            }
+        }
+        private int IncorrectOutcomePoints
+        {
+            get
+            {
+                return 0;
+            }
+        }
+        [Inject]
+        public IDatabaseConnection DatabaseConnection { private get; set; }
+
 
         public CompetitionSeason(int id)
         {
             Id = id;
+            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
         }
 
-        public List<Fixture> GetFixtures()
+
+        public IEnumerable<Fixture> GetFixtures()
         {
             var fixtures = new List<Fixture>();
             try
@@ -82,6 +115,43 @@ namespace FootballPredictor.Models.Competitions
         public void AddPlayer(int playerId)
         {
             // TO DO
+        }
+        public int PointsFor(PredictionOutcome predictionOutcome)
+        {
+            switch (predictionOutcome)
+            {
+                case PredictionOutcome.CorrectScore:
+                    return CorrectScorePoints;
+                case PredictionOutcome.CorrectOutcome:
+                    return CorrectOutcomePoints;
+                case PredictionOutcome.IncorrectOutcome:
+                    return IncorrectOutcomePoints;
+                default:
+                    return 0;
+            }
+        }
+        public int CalculatePredictionPoints(ClosedPrediction prediction)
+        {
+            if (prediction.Fixture.Score.HomeGoals == prediction.Score.HomeGoals && prediction.Fixture.Score.AwayGoals == prediction.Score.AwayGoals)
+            {
+                return PointsFor(PredictionOutcome.CorrectScore);
+            }
+            else if (prediction.Fixture.Score.HomeGoals == prediction.Fixture.Score.AwayGoals && prediction.Score.HomeGoals == prediction.Score.AwayGoals)
+            {
+                // Correctly guessed a draw
+                return PointsFor(PredictionOutcome.CorrectOutcome);
+            }
+            else if (
+                (prediction.Fixture.Score.HomeGoals > prediction.Fixture.Score.AwayGoals && prediction.Score.HomeGoals > prediction.Score.AwayGoals)
+                || (prediction.Fixture.Score.AwayGoals < prediction.Fixture.Score.HomeGoals && prediction.Score.AwayGoals < prediction.Score.HomeGoals)
+            )
+            {
+                return PointsFor(PredictionOutcome.CorrectOutcome);
+            }
+            else
+            {
+                return PointsFor(PredictionOutcome.IncorrectOutcome);
+            }
         }
     }
 }

@@ -197,10 +197,14 @@
     <Compile Include="Models\Competitions\FixtureScore.cs" />
     <Compile Include="Models\Competitions\ICompetition.cs" />
     <Compile Include="Models\Competitions\ICompetitionSeason.cs" />
+    <Compile Include="Models\Competitions\IFixture.cs" />
     <Compile Include="Models\Competitions\IPlayer.cs" />
-    <Compile Include="Models\Competitions\IPrediction.cs" />
+    <Compile Include="Models\Predictions\ClosedPrediction.cs" />
+    <Compile Include="Models\Predictions\IPrediction.cs" />
     <Compile Include="Models\Competitions\ISeason.cs" />
-    <Compile Include="Models\Competitions\PredictionScore.cs" />
+    <Compile Include="Models\Predictions\OpenPrediction.cs" />
+    <Compile Include="Models\Predictions\PredictionOutcome.cs" />
+    <Compile Include="Models\Predictions\PredictionScore.cs" />
     <Compile Include="Models\Competitions\Score.cs" />
     <Compile Include="Models\Connections\Connection.cs" />
     <Compile Include="Models\Connections\DatabaseConnection.cs" />
@@ -217,9 +221,10 @@
     <Compile Include="Models\People\Password.cs" />
     <Compile Include="Models\People\Person.cs" />
     <Compile Include="Models\Competitions\Player.cs" />
-    <Compile Include="Models\Competitions\Prediction.cs" />
+    <Compile Include="Models\Predictions\Prediction.cs" />
     <Compile Include="Models\Competitions\Season.cs" />
     <Compile Include="Models\People\User.cs" />
+    <Compile Include="Models\Utilities\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

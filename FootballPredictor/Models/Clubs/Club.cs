@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using FootballPredictor.App_Start;
 using FootballPredictor.Models.Connections;
+using Ninject;
 
 namespace FootballPredictor.Models.Clubs
 {
@@ -10,14 +12,15 @@ namespace FootballPredictor.Models.Clubs
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
+        [Inject]
         public IDatabaseConnection DatabaseConnection { get; set; }
 
 
-        public Club(int id, string name, IDatabaseConnection databaseConnection)
+        public Club(int id, string name)
         {
             Id = id;
             Name = name;
-            DatabaseConnection = databaseConnection;
+            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
         }
 
     }

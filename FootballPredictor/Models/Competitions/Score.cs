@@ -7,8 +7,8 @@ namespace FootballPredictor.Models.Competitions
 {
     public abstract class Score
     {
-        public int HomeGoals { get; private set; }
-        public int AwayGoals { get; private set; }
+        public int HomeGoals { get; protected set; }
+        public int AwayGoals { get; protected set; }
         public string EnteredScore
         {
             get

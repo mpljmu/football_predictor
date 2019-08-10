@@ -7,23 +7,35 @@ using System.Linq;
 using System.Web;
 using Dapper;
 using FootballPredictor.Models.Clubs;
+using Ninject;
+using FootballPredictor.Models.Connections;
+using FootballPredictor.App_Start;
+using FootballPredictor.Models.Predictions;
 
 namespace FootballPredictor.Models.Competitions
 {
-    public class Fixture
+    public class Fixture : IFixture
     {
-        private enum Points
-        {
-            CorrectScore = 3,
-            CorrectOutcome = 1,
-            Incorrect = 0
-        }
-
         public int Id { get; private set; }
         public IClub HomeClub { get; private set; }
-        public IClub AwayClub {get; set;}
+        public IClub AwayClub { get; set; }
         public DateTime Date { get; private set; }
         private FixtureScore Score { get; set; }
+        public bool Completed { get; private set; }
+        public bool OpenForPredictions {
+            get
+            {
+                if (Date > new Utilities.Utility().UKDateTime)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            }
+        }
+        [Inject]
+        public IDatabaseConnection DatabaseConnection { private get; set; }
 
 
         public Fixture(int id)
@@ -38,43 +50,126 @@ namespace FootballPredictor.Models.Competitions
             Date = date;
             Score = score;
         }
-        
+        public Fixture(int id, bool completed)
+        {
+            Id = id;
+            Completed = completed;
+            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
+        }
 
+
+        public IFixture GetFromDatabase()
+        {
+            try
+            {
+                using (DatabaseConnection.Connection)
+                {
+                    IFixture fixture = DatabaseConnection.Connection.Query<Fixture, Club, Club, FixtureScore, Fixture>(
+                        @"SELECT
+	                        FixtureId,
+	                        FixtureDate,
+	                        HomeClubId,
+	                        HomeClubName,
+	                        AwayClubId,
+	                        AwayClubName
+                          FROM
+	                        vwFixtureClubs
+                          WHERE
+                            FixtureId = Id",
+                        (thisFixture, thisHomeClub, thisAwayClub, thisScore) =>
+                        {
+                            thisFixture.HomeClub = thisHomeClub;
+                            thisFixture.AwayClub = thisAwayClub;
+                            thisFixture.Score = thisScore;
+                            return thisFixture;
+                        },
+                        new
+                        {
+                            Id = Id
+                        }
+                    ).FirstOrDefault();
+                    return fixture;
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log
+                throw ex;
+            }
+        }
         public void UpdateScore()
         {
             try
             {
-                
-            } catch
+                using (DatabaseConnection.Connection)
+                {
+                    DatabaseConnection.Connection.Execute(
+                        @"UPDATE Fixture
+                          SET
+                            HomeGoals = @homeGoals
+                            AwayGoals = @awayGoals
+                          WHERE
+                            Id = @Id",
+                        new
+                        {
+                            HomeGoals = Score.HomeGoals,
+                            AwayGoas = Score.AwayGoals,
+                            Id = Id
+                        }
+                    );
+                }
+            }
+            catch (Exception ex)
             {
-
+                // TODO: Log
+                throw ex;
             }
         }
         public void UpdateDate()
         {
-
+            try
+            {
+                using (DatabaseConnection.Connection)
+                {
+                    DatabaseConnection.Connection.Execute(
+                        @"UPDATE Fixture
+                          SET
+                            Date = @Date
+                          WHERE
+                            Id = Id",
+                        new
+                        {
+                            Date = Date,
+                            Id = Id
+                        }
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Log
+            }
         }
-        public int CalculatePredictionPoints(PredictionScore predictionScore)
+        public void SetCompletedStatus()
         {
-            if (Score.HomeGoals == predictionScore.HomeGoals && Score.AwayGoals == predictionScore.AwayGoals)
+            try
             {
-                return (int)Points.CorrectScore;
+                using (DatabaseConnection.Connection)
+                {
+                    DatabaseConnection.Connection.Execute(
+                        @"UPDATE FixtureScore
+                          SET Completed = @Completed
+                          WHERE FixtureId = @FixtureId",
+                        new
+                        {
+                            FixtureId = Id
+                        }
+                    );
+                }
             }
-            else if (Score.HomeGoals == Score.AwayGoals && predictionScore.HomeGoals == predictionScore.AwayGoals)
+            catch (Exception ex)
             {
-                // Correctly guessed a draw
-                return (int)Points.CorrectOutcome;
-            }
-            else if (
-                (Score.HomeGoals > Score.AwayGoals && predictionScore.HomeGoals > predictionScore.AwayGoals)
-                || (Score.AwayGoals < Score.HomeGoals && predictionScore.AwayGoals < predictionScore.HomeGoals)
-            )
-            {
-                return (int)Points.CorrectOutcome;
-            }
-            else
-            {
-                return (int)Points.Incorrect;
+                // TODO: Log
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using FootballPredictor.Models.People;
+using FootballPredictor.Models.Predictions;
 
 namespace FootballPredictor.Models.Competitions
 {
@@ -11,23 +12,72 @@ namespace FootballPredictor.Models.Competitions
         public int Id { get; set; }
         public IUser User { get; private set; }
         public ICompetitionSeason CompetitionSeason { get; private set; }
-        public int Points
+        public IEnumerable<OpenPrediction> OpenPredictions { get; private set; }
+        public IEnumerable<ClosedPrediction> ClosedPredictions { get; private set; }
+        private IPrediction[] Form { get; }
+        public int CorrectScores {
+            get
+            {
+                int count = 0;
+                foreach (var prediction in ClosedPredictions)
+                {
+                    if (CompetitionSeason.CalculatePredictionPoints(prediction) == CompetitionSeason.PointsFor(PredictionOutcome.CorrectScore))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+        public int CorrectOutcomes
+        {
+            get
+            {
+                int count = 0;
+                foreach (var prediction in ClosedPredictions)
+                {
+                    if (CompetitionSeason.CalculatePredictionPoints(prediction) == CompetitionSeason.PointsFor(PredictionOutcome.CorrectOutcome))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+        public int IncorrectOutcomes
+        {
+            get
+            {
+                int count = 0;
+                foreach (var prediction in ClosedPredictions)
+                {
+                    if (CompetitionSeason.CalculatePredictionPoints(prediction) == CompetitionSeason.PointsFor(PredictionOutcome.IncorrectOutcome))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+        public int MissedPredictions {
+            get
+            {
+                // TODO: Might be a calculation based on above
+                return 0;
+            }
+        }
+        public int TotalPoints
         {
             get
             {
                 int totalPoints = 0;
-                foreach (Prediction prediction in Predictions)
+                foreach (var prediction in ClosedPredictions)
                 {
-                    totalPoints += prediction.Points;
+                    totalPoints += CompetitionSeason.CalculatePredictionPoints(prediction);
                 }
                 return totalPoints;
             }
         }
-        public IEnumerable<Prediction> Predictions { get; private set; }
-        public ICompetition Competition => throw new NotImplementedException();
-        public ISeason Season => throw new NotImplementedException();
-        private IPrediction[] Form { get; }
-        IEnumerable<IPrediction> IPlayer.Predictions { get; }
 
 
         public Player(int id)
