@@ -16,19 +16,27 @@ namespace FootballPredictor.Models.Competitions
 {
     public class Fixture : IFixture
     {
-        public int Id { get; private set; }
-        public IClub HomeClub { get; private set; }
+        public int Id { get; protected set; }
+        public IClub HomeClub { get; protected set; }
         public IClub AwayClub { get; set; }
-        public DateTime Date { get; private set; }
-        private FixtureScore Score { get; set; }
-        public bool Completed { get; private set; }
-        public bool OpenForPredictions {
+        public DateTime Date { get; protected set; }
+        public FixtureScore Score { get; protected set; }
+        /// <summary>
+        /// Ended and has a full-time result when it is then marked as completed. Allows for in-play score updates
+        /// </summary>
+        public bool Completed { get; protected set; }
+        /// <summary>
+        /// Open for predictions if it has not started yet
+        /// </summary>
+        public bool OpenForPredictions
+        {
             get
             {
                 if (Date > new Utilities.Utility().UKDateTime)
                 {
                     return true;
-                } else
+                }
+                else
                 {
                     return false;
                 }
@@ -148,6 +156,7 @@ namespace FootballPredictor.Models.Competitions
             catch (Exception ex)
             {
                 // TODO: Log
+                throw ex;
             }
         }
         public void SetCompletedStatus()
@@ -170,6 +179,7 @@ namespace FootballPredictor.Models.Competitions
             catch (Exception ex)
             {
                 // TODO: Log
+                throw ex;
             }
         }
     }

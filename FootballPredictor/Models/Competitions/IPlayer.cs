@@ -9,7 +9,7 @@ namespace FootballPredictor.Models.Competitions
         int Id { get; }
         ICompetitionSeason CompetitionSeason { get; }
         IEnumerable<OpenPrediction> OpenPredictions { get; }
-        IEnumerable<ClosedPrediction> ClosedPredictions { get; }
+        IEnumerable<Prediction> ClosedPredictions { get; }
         IUser User { get; }
     }
 }

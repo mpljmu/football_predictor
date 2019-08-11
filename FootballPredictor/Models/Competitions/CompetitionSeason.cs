@@ -15,9 +15,10 @@ namespace FootballPredictor.Models.Competitions
     public class CompetitionSeason : ICompetitionSeason
     {
         public int Id { get; set; }
-        public ICompetition Competition { get; private set; }
-        public ISeason Season { get; private set; }
-        public IEnumerable<IPlayer> Players { get; private set; }
+        public ICompetition Competition { get; protected set; }
+        public ISeason Season { get; protected set; }
+        public IEnumerable<IPlayer> Players { get; protected set; }
+        public IEnumerable<IFixture> Fixtures { get; protected set; }
         private int CorrectOutcomePoints
         {
             get
@@ -39,8 +40,53 @@ namespace FootballPredictor.Models.Competitions
                 return 0;
             }
         }
+        public IEnumerable<IFixture> FixturesOpenForPrediction
+        {
+            get
+            {
+                var fixtures = new List<IFixture>();
+                foreach (IFixture fixture in Fixtures)
+                {
+                    if (fixture.OpenForPredictions)
+                    {
+                        fixtures.Add(fixture);
+                    }
+                }
+                return fixtures;
+            }
+        }
+        public IEnumerable<IFixture> LiveFixtures
+        {
+            get
+            {
+                var fixtures = new List<IFixture>();
+                foreach (var fixture in Fixtures)
+                {
+                    if (!fixture.OpenForPredictions && !fixture.Completed)
+                    {
+                        fixtures.Add(fixture);
+                    }
+                }
+                return fixtures;
+            }
+        }
+        public IEnumerable<IFixture> CompletedFixtures
+        {
+            get
+            {
+                var fixtures = new List<IFixture>();
+                foreach (var fixture in Fixtures)
+                {
+                    if (fixture.Completed)
+                    {
+                        fixtures.Add(fixture);
+                    }
+                }
+                return fixtures;
+            }
+        }
         [Inject]
-        public IDatabaseConnection DatabaseConnection { private get; set; }
+        public IDatabaseConnection DatabaseConnection { protected get; set; }
 
 
         public CompetitionSeason(int id)
@@ -50,22 +96,31 @@ namespace FootballPredictor.Models.Competitions
         }
 
 
-        public IEnumerable<Fixture> GetFixtures()
+        public void GetFixtures()
         {
-            var fixtures = new List<Fixture>();
             try
             {
-                using (var connection = new DatabaseConnection().Connection)
+                using (DatabaseConnection.Connection)
                 {
-                    connection.Open();
-                    fixtures = connection.Query<Fixture, FixtureScore, Club, Club, Fixture>(
-                    (@"SELECT fixture.fixtureID Id,  CAST(CONVERT(VARCHAR(8), fixture.[fixtureDate], 112) + ' ' + CAST(fixture.[fixtureTime] AS VARCHAR(5)) AS DATE) [Date], fixture.homeGoals HomeGoals, fixture.awayGoals AwayGoals, homeClub.clubId Id, homeClub.clubName Name, awayClub.clubId Id, awayClub.clubName Name
-                     FROM tblFixture fixture
-                     INNER JOIN tblClub homeClub
-                     ON fixture.homeClubId = homeClub.clubId
-                     INNER JOIN tblClub awayClub
-                     ON fixture.awayClubId = awayClub.clubId
-                     ORDER BY fixtureDate DESC, fixtureTime"
+                    Fixtures = DatabaseConnection.Connection.Query<Fixture, FixtureScore, Club, Club, Fixture>(
+                    (@"SELECT
+	                    Fixture.Id,
+	                    Fixture.HomeClubId,
+	                    Fixture.AwayClubId,
+	                    Fixture.[Date],
+	                    FixtureScore.HomeGoals,
+	                    FixtureScore.AwayGoals,
+	                    FixtureScore.Completed
+                      FROM
+		                    CompetitionSeason
+	                    INNER JOIN CompetitionSeasonClub
+		                    ON CompetitionSeason.Id = CompetitionSeasonClub.CompetitionSeasonId
+	                    INNER JOIN Fixture
+		                    ON (Fixture.HomeClubId = CompetitionSeasonClub.ClubId OR Fixture.AwayClubId = CompetitionSeasonClub.ClubId)
+	                    LEFT OUTER JOIN FixtureScore
+		                    ON Fixture.Id = FixtureScore.FixtureId
+                      WHERE
+                        CompetitionSeason.Id = @CompetitionSeasonId"
                     ),
                     (fixture, fixtureScore, homeClub, awayClub) =>
                     {
@@ -73,44 +128,55 @@ namespace FootballPredictor.Models.Competitions
                         fixture = new Fixture(fixture.Id, homeClub, awayClub, fixture.Date, fixtureScore);
                         return fixture;
                     },
+                    new
+                    {
+                        CompetitionSeasonId = Id
+                    },
                     splitOn: "Id,HomeGoals,Id,Id").ToList();
+
                 }
             }
             catch (Exception ex)
             {
                 // TODO
+                throw ex;
             }
-            return fixtures;
         }
-        public IEnumerable<Player> GetPlayers()
+        public void GetPlayers()
         {
-
-            var databaseConnection = new DatabaseConnection();
-            using (databaseConnection.Connection)
+            using (DatabaseConnection.Connection)
             {
                 try
                 {
-                    databaseConnection.Connection.Open();
-                    var players = databaseConnection.Connection.Query<User>(
-                        (@"SELECT PlayerId, PlayerUsername, PlayerForename, PlayerSurname
-                          FROM vwPlayerCompetition
-                          WHERE CompetitionId = @CompetitionId AND SeasonName = @SeasonName"
+                    Players = DatabaseConnection.Connection.Query<Player, User, Player>(
+                        (@"SELECT
+	                        PlayerId Id,
+	                        [User].Id UserId
+                          FROM
+		                        vwPlayers
+	                        INNER JOIN Player
+		                        ON vwPlayers.PlayerId = Player.Id
+	                        INNER JOIN [User]
+		                        ON vwPlayers.UserId = [User].Id
+                          WHERE
+                            CompetitionSeasonId = @CompetitionSeasonId"
                         ),
+                        (thisPlayer, thisUser) => {
+                            thisPlayer.User = thisUser;
+                            return thisPlayer;
+                        },
                         new
                         {
-                            CompetitionId = Competition.Id,
-                            SeasonName = Season.Id
+                            CompetitionSeasonId = Id,
                         }
                     );
                 }
                 catch (Exception ex)
                 {
-                    // TODO
+                    // TODO: Log
+                    throw ex;
                 }
-
-
             }
-            return new List<Player>();
         }
         public void AddPlayer(int playerId)
         {
@@ -130,7 +196,7 @@ namespace FootballPredictor.Models.Competitions
                     return 0;
             }
         }
-        public int CalculatePredictionPoints(ClosedPrediction prediction)
+        public int CalculatePredictionPoints(Prediction prediction)
         {
             if (prediction.Fixture.Score.HomeGoals == prediction.Score.HomeGoals && prediction.Fixture.Score.AwayGoals == prediction.Score.AwayGoals)
             {
