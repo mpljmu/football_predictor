@@ -6,6 +6,7 @@ using Dapper;
 using FootballPredictor.App_Start;
 using FootballPredictor.Models.Clubs;
 using FootballPredictor.Models.Connections;
+using FootballPredictor.Models.Fixtures;
 using FootballPredictor.Models.People;
 using FootballPredictor.Models.Predictions;
 using Ninject;
@@ -96,92 +97,6 @@ namespace FootballPredictor.Models.Competitions
         }
 
 
-        public void GetFixtures()
-        {
-            try
-            {
-                using (DatabaseConnection.Connection)
-                {
-                    Fixtures = DatabaseConnection.Connection.Query<Fixture, FixtureScore, Club, Club, Fixture>(
-                    (@"SELECT
-	                    Fixture.Id,
-	                    Fixture.HomeClubId,
-	                    Fixture.AwayClubId,
-	                    Fixture.[Date],
-	                    FixtureScore.HomeGoals,
-	                    FixtureScore.AwayGoals,
-	                    FixtureScore.Completed
-                      FROM
-		                    CompetitionSeason
-	                    INNER JOIN CompetitionSeasonClub
-		                    ON CompetitionSeason.Id = CompetitionSeasonClub.CompetitionSeasonId
-	                    INNER JOIN Fixture
-		                    ON (Fixture.HomeClubId = CompetitionSeasonClub.ClubId OR Fixture.AwayClubId = CompetitionSeasonClub.ClubId)
-	                    LEFT OUTER JOIN FixtureScore
-		                    ON Fixture.Id = FixtureScore.FixtureId
-                      WHERE
-                        CompetitionSeason.Id = @CompetitionSeasonId"
-                    ),
-                    (fixture, fixtureScore, homeClub, awayClub) =>
-                    {
-                        // CHECK WHY THE SCORE OBJECT IS NULL - IS IT THE QUERY??
-                        fixture = new Fixture(fixture.Id, homeClub, awayClub, fixture.Date, fixtureScore);
-                        return fixture;
-                    },
-                    new
-                    {
-                        CompetitionSeasonId = Id
-                    },
-                    splitOn: "Id,HomeGoals,Id,Id").ToList();
-
-                }
-            }
-            catch (Exception ex)
-            {
-                // TODO
-                throw ex;
-            }
-        }
-        public void GetPlayers()
-        {
-            using (DatabaseConnection.Connection)
-            {
-                try
-                {
-                    Players = DatabaseConnection.Connection.Query<Player, User, Player>(
-                        (@"SELECT
-	                        PlayerId Id,
-	                        [User].Id UserId
-                          FROM
-		                        vwPlayers
-	                        INNER JOIN Player
-		                        ON vwPlayers.PlayerId = Player.Id
-	                        INNER JOIN [User]
-		                        ON vwPlayers.UserId = [User].Id
-                          WHERE
-                            CompetitionSeasonId = @CompetitionSeasonId"
-                        ),
-                        (thisPlayer, thisUser) => {
-                            thisPlayer.User = thisUser;
-                            return thisPlayer;
-                        },
-                        new
-                        {
-                            CompetitionSeasonId = Id,
-                        }
-                    );
-                }
-                catch (Exception ex)
-                {
-                    // TODO: Log
-                    throw ex;
-                }
-            }
-        }
-        public void AddPlayer(int playerId)
-        {
-            // TO DO
-        }
         public int PointsFor(PredictionOutcome predictionOutcome)
         {
             switch (predictionOutcome)
@@ -196,7 +111,7 @@ namespace FootballPredictor.Models.Competitions
                     return 0;
             }
         }
-        public int CalculatePredictionPoints(Prediction prediction)
+        public int CalculatePredictionPoints(IPrediction prediction)
         {
             if (prediction.Fixture.Score.HomeGoals == prediction.Score.HomeGoals && prediction.Fixture.Score.AwayGoals == prediction.Score.AwayGoals)
             {

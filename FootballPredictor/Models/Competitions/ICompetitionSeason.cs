@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-using FootballPredictor.Models.Connections;
+﻿using FootballPredictor.Models.Connections;
 using FootballPredictor.Models.Predictions;
+using System.Collections.Generic;
+using FootballPredictor.Models.Fixtures;
+using FootballPredictor.Models.People;
 
 namespace FootballPredictor.Models.Competitions
 {
@@ -16,10 +18,7 @@ namespace FootballPredictor.Models.Competitions
         IEnumerable<IPlayer> Players { get; }
         ISeason Season { get; }
 
-        void AddPlayer(int playerId);
-        int CalculatePredictionPoints(Prediction prediction);
-        void GetFixtures();
-        void GetPlayers();
+        int CalculatePredictionPoints(IPrediction prediction);
         int PointsFor(PredictionOutcome predictionOutcome);
     }
 }

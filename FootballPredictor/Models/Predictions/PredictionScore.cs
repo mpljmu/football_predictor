@@ -6,12 +6,16 @@ using System.Web;
 
 namespace FootballPredictor.Models.Predictions
 {
-    public class PredictionScore : Score
+    public class PredictionScore : IPredictionScore
     {
-        public PredictionScore(byte homeGoals, byte awayGoals)
-            : base(homeGoals, awayGoals)
-        {
+        public byte HomeGoals { get; private set; }
+        public byte AwayGoals { get; private set; }
 
+
+        public PredictionScore(byte homeGoals, byte awayGoals)
+        {
+            HomeGoals = homeGoals;
+            AwayGoals = awayGoals;
         }
     }
 }

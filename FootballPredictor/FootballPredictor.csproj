@@ -19,7 +19,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44397</IISExpressSSLPort>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -73,6 +74,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -181,12 +185,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\Clubs\ClubsController.cs" />
-    <Compile Include="Controllers\CompetitionsController.cs" />
-    <Compile Include="Controllers\CompetitionSeasonController.cs" />
-    <Compile Include="Controllers\Competitions\PredictionsController.cs" />
-    <Compile Include="Controllers\FixturesController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\PlayersController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\CompletedRankingsController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\CompetitionSeasonCompletedFixturePredictionsController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\IPredictionsRespository.cs" />
+    <Compile Include="Controllers\Competitions\CompetitionsController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\CompetitionSeasonController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\FixturesController.cs" />
+    <Compile Include="Controllers\Fixtures\FixtureCompletionsController.cs" />
+    <Compile Include="Controllers\Fixtures\FixtureDateController.cs" />
+    <Compile Include="Controllers\Fixtures\FixtureScoreController.cs" />
+    <Compile Include="Controllers\Predictions\PredictionsController.cs" />
+    <Compile Include="Controllers\Fixtures\FixturesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -194,22 +205,25 @@
     <Compile Include="Models\Clubs\IClub.cs" />
     <Compile Include="Models\Competitions\Competition.cs" />
     <Compile Include="Models\Competitions\CompetitionSeason.cs" />
-    <Compile Include="Models\Competitions\FixtureScore.cs" />
+    <Compile Include="Models\Fixtures\FixtureScore.cs" />
     <Compile Include="Models\Competitions\ICompetition.cs" />
     <Compile Include="Models\Competitions\ICompetitionSeason.cs" />
-    <Compile Include="Models\Competitions\IFixture.cs" />
-    <Compile Include="Models\Competitions\IPlayer.cs" />
+    <Compile Include="Models\Fixtures\IFixture.cs" />
+    <Compile Include="Models\Fixtures\IFixtureScore.cs" />
+    <Compile Include="Models\Loggers\IDatabaseLoggerCategory.cs" />
+    <Compile Include="Models\People\IPlayer.cs" />
+    <Compile Include="Models\Predictions\IOpenPrediction.cs" />
     <Compile Include="Models\Predictions\IPrediction.cs" />
     <Compile Include="Models\Competitions\ISeason.cs" />
+    <Compile Include="Models\Predictions\IPredictionScore.cs" />
     <Compile Include="Models\Predictions\OpenPrediction.cs" />
     <Compile Include="Models\Predictions\PredictionOutcome.cs" />
     <Compile Include="Models\Predictions\PredictionScore.cs" />
-    <Compile Include="Models\Competitions\Score.cs" />
     <Compile Include="Models\Connections\Connection.cs" />
     <Compile Include="Models\Connections\DatabaseConnection.cs" />
     <Compile Include="Models\Connections\IDatabaseConnection.cs" />
     <Compile Include="Models\Connections\SqlServerDatabaseConnection.cs" />
-    <Compile Include="Models\Competitions\Fixture.cs" />
+    <Compile Include="Models\Fixtures\Fixture.cs" />
     <Compile Include="Models\Loggers\DatabaseLogger.cs" />
     <Compile Include="Models\Loggers\DatabaseLoggerCategory.cs" />
     <Compile Include="Models\Loggers\ILogger.cs" />
@@ -219,12 +233,27 @@
     <Compile Include="Models\People\IUser.cs" />
     <Compile Include="Models\People\Password.cs" />
     <Compile Include="Models\People\Person.cs" />
-    <Compile Include="Models\Competitions\Player.cs" />
+    <Compile Include="Models\People\Player.cs" />
     <Compile Include="Models\Predictions\Prediction.cs" />
     <Compile Include="Models\Competitions\Season.cs" />
     <Compile Include="Models\People\User.cs" />
+    <Compile Include="Models\Rankings\IRanking.cs" />
+    <Compile Include="Models\Rankings\Ranking.cs" />
     <Compile Include="Models\Utilities\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\CompetitionSeason\CompletedFixturesController.cs" />
+    <Compile Include="Repositories\CompetitionSeason\CompetitionSeasonFixturesRepository.cs" />
+    <Compile Include="Controllers\CompetitionSeason\LiveFixturesController.cs" />
+    <Compile Include="Controllers\CompetitionSeason\OpenFixturesController.cs" />
+    <Compile Include="Repositories\CompetitionSeason\CompetitionSeasonPlayersRepository.cs" />
+    <Compile Include="Repositories\CompetitionSeason\ICompetitionSeasonFixturesRepository.cs" />
+    <Compile Include="Repositories\CompetitionSeason\ICompetitionSeasonPlayersRepository.cs" />
+    <Compile Include="Repositories\Fixtures\FixtureRepository.cs" />
+    <Compile Include="Repositories\Fixtures\IFixtureRepository.cs" />
+    <Compile Include="Repositories\Predictions\IOpenPredictionRepository.cs" />
+    <Compile Include="Repositories\Predictions\IPredictionRepository.cs" />
+    <Compile Include="Repositories\Predictions\OpenPredictionRepository.cs" />
+    <Compile Include="Repositories\Predictions\PredictionRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -234,6 +263,21 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\brands.css" />
+    <Content Include="Content\brands.min.css" />
+    <Content Include="Content\fontawesome-all.css" />
+    <Content Include="Content\fontawesome-all.min.css" />
+    <Content Include="Content\fontawesome.css" />
+    <Content Include="Content\fontawesome.min.css" />
+    <Content Include="Content\regular.css" />
+    <Content Include="Content\regular.min.css" />
+    <Content Include="Content\site.css" />
+    <Content Include="Content\solid.css" />
+    <Content Include="Content\solid.min.css" />
+    <Content Include="Content\svg-with-js.css" />
+    <Content Include="Content\svg-with-js.min.css" />
+    <Content Include="Content\v4-shims.css" />
+    <Content Include="Content\v4-shims.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -256,6 +300,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="ConnectionStrings.config" />
+    <Content Include="images\football.png" />
     <Content Include="libman.json" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -280,15 +325,31 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\fontawesome\all.js" />
+    <Content Include="Scripts\fontawesome\all.min.js" />
+    <Content Include="Scripts\fontawesome\brands.js" />
+    <Content Include="Scripts\fontawesome\brands.min.js" />
+    <Content Include="Scripts\fontawesome\conflict-detection.js" />
+    <Content Include="Scripts\fontawesome\conflict-detection.min.js" />
+    <Content Include="Scripts\fontawesome\fontawesome.js" />
+    <Content Include="Scripts\fontawesome\fontawesome.min.js" />
+    <Content Include="Scripts\fontawesome\regular.js" />
+    <Content Include="Scripts\fontawesome\regular.min.js" />
+    <Content Include="Scripts\fontawesome\solid.js" />
+    <Content Include="Scripts\fontawesome\solid.min.js" />
+    <Content Include="Scripts\fontawesome\v4-shims.js" />
+    <Content Include="Scripts\fontawesome\v4-shims.min.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery.easing.1.3.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\footballpredictor.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -301,10 +362,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
-    <Content Include="Content\Site.css" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -316,6 +374,22 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="webfonts\fa-brands-400.svg" />
+    <Content Include="webfonts\fa-regular-400.svg" />
+    <Content Include="webfonts\fa-solid-900.svg" />
+    <Content Include="webfonts\fa-solid-900.woff2" />
+    <Content Include="webfonts\fa-solid-900.woff" />
+    <Content Include="webfonts\fa-solid-900.ttf" />
+    <Content Include="webfonts\fa-solid-900.eot" />
+    <Content Include="webfonts\fa-regular-400.woff2" />
+    <Content Include="webfonts\fa-regular-400.woff" />
+    <Content Include="webfonts\fa-regular-400.ttf" />
+    <Content Include="webfonts\fa-regular-400.eot" />
+    <Content Include="webfonts\fa-brands-400.woff2" />
+    <Content Include="webfonts\fa-brands-400.woff" />
+    <Content Include="webfonts\fa-brands-400.ttf" />
+    <Content Include="webfonts\fa-brands-400.eot" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -350,7 +424,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>58779</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44397/</IISUrl>
+          <IISUrl>http://localhost:49570/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

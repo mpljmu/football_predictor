@@ -24,31 +24,14 @@ namespace FootballPredictor.Models.People
         public IPassword Password { private get; set; }
         public bool Active { get; set; }
         public bool IsAdministrator { get; set; }
-        [Inject]
-        public IDatabaseConnection databaseConnection { private get; set; }
 
 
-        public User(int id, string username, string surname, string forename)
+        public User(int id, string username, string forename, string surname)
         {
             Id = id;
             Username = username;
-            Surname = surname;
             Forename = forename;
-            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
-        }
-
-
-        public void Create()
-        {
-
-        }
-        public void UpdatePassword(IPassword password)
-        {
-
-        }
-        public void UpdateActive(bool active)
-        {
-
+            Surname = surname;
         }
     }
 }

@@ -5,11 +5,9 @@ using System.Web;
 
 namespace FootballPredictor.Models.Loggers
 {
-    public class DatabaseLoggerCategory
+    public class DatabaseLoggerCategory : IDatabaseLoggerCategory
     {
-        public string Name { get; private set;}
-
-
+        public string Name { get; private set; }
         public static DatabaseLoggerCategory Success
         {
             get
@@ -37,7 +35,7 @@ namespace FootballPredictor.Models.Loggers
         {
             Name = name;
         }
-        
+
 
     }
 }

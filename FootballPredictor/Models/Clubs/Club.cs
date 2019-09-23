@@ -12,15 +12,12 @@ namespace FootballPredictor.Models.Clubs
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
-        [Inject]
-        public IDatabaseConnection DatabaseConnection { get; set; }
 
 
         public Club(int id, string name)
         {
             Id = id;
             Name = name;
-            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
         }
 
     }

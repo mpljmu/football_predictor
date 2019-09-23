@@ -18,13 +18,17 @@ namespace FootballPredictor.Models.Loggers
         }
 
 
-        public override void Insert(string message, Category classification, DateTime dateTime, int userId)
+        public override void Insert(string message, IDatabaseLoggerCategory classification, DateTime dateTime, int userId)
         {
-
+            throw new NotImplementedException();
         }
-        public override void Insert(string message, string tableName, int recordId, Category classification, DateTime dateTime, int userId)
+        public override void Insert(string message, string tableName, int recordId, IDatabaseLoggerCategory classification, DateTime dateTime, int userId)
         {
-
+            throw new NotImplementedException();
+        }
+        public override void Insert(string message, string className, string methodName, IDatabaseLoggerCategory classification, DateTime dateTime, int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

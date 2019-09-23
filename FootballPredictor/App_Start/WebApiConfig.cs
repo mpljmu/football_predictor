@@ -15,10 +15,17 @@ namespace FootballPredictor
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "A",
+                routeTemplate: "api/competitionseason/{competitionSeasonId}/{controller}",
+                defaults: new { }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
         }
     }
 }

@@ -1,24 +1,188 @@
-﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid p-0">
+
+    <section class="page-section p-3 p-lg-5 d-flex align-items-center" id="summary">
+        <div class="w-100">
+            <h1 class="mb-1">
+                <span class="text-primary">Bury Council & Bolton NHS</span>
+            </h1>
+            <div class="subheading mb-2">
+                Season: 2019/2020
+            </div>
+            <div class="subheading mb-2">
+                Current leader: 
+                <a href="#" id="currentLeader">Marco Petrillo (72 points)</a>
+            </div>
+            <div class="subheading mb-2">
+                My position:
+                <span id="myPosition">2nd</span>
+            </div>
+        </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="page-section p-3 p-lg-5 d-flex justify-content-center" id="rankings">
+        <div class="w-100">
+            <h2 class="mb-3">Rankings</h2>
+            <div class="page-item d-flex flex-column flex-md-row justify-content-between mb-5">
+                <div class="page-content">
+                    <div class="mb-2">
+                        <span>Status</span>
+                        <select class="form-control">
+                            <option value="Live">Live</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Player</th>
+                                    <th>Predictions</th>
+                                    <th>Correct scores</th>
+                                    <th>Correct outcomes</th>
+                                    <th>Missed</th>
+                                    <th>Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Marco Petrillo</td>
+                                    <td>23</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>0</td>
+                                    <td>29</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <hr class="m-0">
+
+    <section class="page-section p-3 p-lg-5 d-flex align-items-center" id="fixtures">
+        <div class="w-100">
+            <h2 class="mb-3">Fixtures</h2>
+
+            <div class="page-item d-flex flex-column flex-md-row justify-content-between mb-5">
+                <div class="page-content">
+                    <div class="mb-2">
+                        <select class="form-control">
+                            <option value="All">All</option>
+                            <option value="Live">Live</option>
+                            <option value="Future">Future</option>
+                        </select>
+                    </div>
+                    <div>
+
+                    </div>
+                    <h3 class="mb-0">Live</h3>
+                    <div class="fixtures">
+                        <div class="subheading mb-1">
+                            <a href="#">
+                                <span>12:00 Manchester United 0 - 0 Liverpool</span>&nbsp;&nbsp;<span class="fa fa-arrow-alt-circle-down"></span>
+                            </a>
+                        </div>
+                        <div class="subheading mb-1">
+                            <a href="#">
+                                <span>12:30 Preston North End 1 - 0 Derby County</span>
+                            </a>
+                        </div>
+                    </div>
+                    <h3>Future</h3>
+                    <div class="fixtures">
+                        <div class="subheading mb-1">
+                            <a href="#" class="future-fixture">
+                                <div>
+                                    <span class="fixture-date">02-Aug-2019 12:00</span>&nbsp;<span class="fixture-title">Arsenal vs Sheffield United</span>
+                                </div>
+                                <div>
+                                    <span>Prediction: 2-0</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="subheading mb-1">
+                            <a href="#" class="future-fixture">
+                                <div>
+                                    <span class="fixture-date">02-Aug-2019 15:00</span>&nbsp;<span class="fixture-title">Manchester City vs Watford</span>
+                                </div>
+                                <div>
+                                    <span class="alert-danger">Prediction: not submitted</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <hr class="m-0">
+
+    <section class="page-section p-3 p-lg-5 d-flex align-items-center" id="history">
+        <div class="w-100">
+            <h2 class="mb-5">Competition history</h2>
+            <h3 class="subheading">Season</h3>
+        </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="page-section p-3 p-lg-5 d-flex align-items-center" id="administration">
+        <div class="w-100">
+            <h2 class="mb-3">Administration</h2>
+        </div>
+    </section>
+
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+
+<div class="modal fade" id="modalPlayer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Marco Petrillo</h3>
+            </div>
+            <div class="modal-body">
+                <p>Player statistics here</p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+</div>
+
+<div class="modal fade" id="modalPrediction">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="fixture-title"></h3>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <span class="subheading fixture-date"></span>
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">Submit</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>

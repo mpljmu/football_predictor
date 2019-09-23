@@ -6,11 +6,11 @@ using System.Data;
 
 namespace FootballPredictor.Models.Connections
 {
-    public class DatabaseConnection : Connection, IDatabaseConnection
+    public abstract class DatabaseConnection : Connection, IDatabaseConnection
     {
 
-        public IDbConnection Connection { get; protected set; }
-        public IDbCommand Command { get; protected set; }
+        public abstract IDbConnection NewConnection();
+
 
     }
 }
