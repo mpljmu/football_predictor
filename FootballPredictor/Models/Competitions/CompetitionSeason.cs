@@ -31,7 +31,7 @@ namespace FootballPredictor.Models.Competitions
         {
             get
             {
-                return 1;
+                return 3;
             }
         }
         private int IncorrectOutcomePoints
@@ -41,10 +41,20 @@ namespace FootballPredictor.Models.Competitions
                 return 0;
             }
         }
+        private int NoFixtureScore {
+            get
+            {
+                return 0;
+            }
+        }
         public IEnumerable<IFixture> FixturesOpenForPrediction
         {
             get
             {
+                if (Fixtures == null)
+                {
+                    return null;
+                }
                 var fixtures = new List<IFixture>();
                 foreach (IFixture fixture in Fixtures)
                 {
@@ -60,6 +70,10 @@ namespace FootballPredictor.Models.Competitions
         {
             get
             {
+                if (Fixtures == null)
+                {
+                    return null;
+                }
                 var fixtures = new List<IFixture>();
                 foreach (var fixture in Fixtures)
                 {
@@ -75,6 +89,10 @@ namespace FootballPredictor.Models.Competitions
         {
             get
             {
+                if (Fixtures == null)
+                {
+                    return null;
+                }
                 var fixtures = new List<IFixture>();
                 foreach (var fixture in Fixtures)
                 {
@@ -86,14 +104,17 @@ namespace FootballPredictor.Models.Competitions
                 return fixtures;
             }
         }
-        [Inject]
-        public IDatabaseConnection DatabaseConnection { protected get; set; }
 
 
         public CompetitionSeason(int id)
         {
             Id = id;
-            NinjectWebCommon.Bootstrapper.Kernel.Inject(this);
+        }
+        public CompetitionSeason(int id, Competition competition, Season season)
+        {
+            Id = id;
+            Competition = competition;
+            Season = season;
         }
 
 
@@ -107,12 +128,19 @@ namespace FootballPredictor.Models.Competitions
                     return CorrectOutcomePoints;
                 case PredictionOutcome.IncorrectOutcome:
                     return IncorrectOutcomePoints;
+                case PredictionOutcome.NoFixtureScore:
+                    return NoFixtureScore;
                 default:
                     return 0;
             }
         }
-        public int CalculatePredictionPoints(IPrediction prediction)
+        public int CalculatePredictionPoints(IClosedPrediction prediction)
         {
+            // Check as at first there may be no fixture score record
+            if (prediction.Fixture.Score == null)
+            {
+                return 0;
+            }
             if (prediction.Fixture.Score.HomeGoals == prediction.Score.HomeGoals && prediction.Fixture.Score.AwayGoals == prediction.Score.AwayGoals)
             {
                 return PointsFor(PredictionOutcome.CorrectScore);
@@ -124,7 +152,7 @@ namespace FootballPredictor.Models.Competitions
             }
             else if (
                 (prediction.Fixture.Score.HomeGoals > prediction.Fixture.Score.AwayGoals && prediction.Score.HomeGoals > prediction.Score.AwayGoals)
-                || (prediction.Fixture.Score.AwayGoals < prediction.Fixture.Score.HomeGoals && prediction.Score.AwayGoals < prediction.Score.HomeGoals)
+                || (prediction.Fixture.Score.AwayGoals > prediction.Fixture.Score.HomeGoals && prediction.Score.AwayGoals > prediction.Score.HomeGoals)
             )
             {
                 return PointsFor(PredictionOutcome.CorrectOutcome);

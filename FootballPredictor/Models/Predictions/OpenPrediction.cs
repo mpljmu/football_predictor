@@ -11,8 +11,8 @@ namespace FootballPredictor.Models.Predictions
 {
     public class OpenPrediction : Prediction, IOpenPrediction
     {
-        public OpenPrediction(int id)
-            : base(id)
+        public OpenPrediction(int id, IPlayer player, IFixture fixture, IPredictionScore predictionScore)
+            : base(id, player, fixture, predictionScore)
         {
 
         }

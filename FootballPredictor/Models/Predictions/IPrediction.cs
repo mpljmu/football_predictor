@@ -12,6 +12,5 @@ namespace FootballPredictor.Models.Predictions
         int Id { get; set; }
         IPlayer Player { get; set; }
         IPredictionScore Score { get; set; }
-
     }
 }

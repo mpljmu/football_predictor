@@ -10,7 +10,6 @@ namespace FootballPredictor.Models.Competitions
     {
         ICompetition Competition { get; }
         IEnumerable<IFixture> CompletedFixtures { get; }
-        IDatabaseConnection DatabaseConnection { set; }
         IEnumerable<IFixture> Fixtures { get; }
         IEnumerable<IFixture> FixturesOpenForPrediction { get; }
         int Id { get; set; }
@@ -18,7 +17,7 @@ namespace FootballPredictor.Models.Competitions
         IEnumerable<IPlayer> Players { get; }
         ISeason Season { get; }
 
-        int CalculatePredictionPoints(IPrediction prediction);
+        int CalculatePredictionPoints(IClosedPrediction prediction);
         int PointsFor(PredictionOutcome predictionOutcome);
     }
 }

@@ -5,39 +5,30 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using FootballPredictor.Models;
+using FootballPredictor.Repositories.Competitions;
 
 namespace FootballPredictor.Controllers.Comeptitions
 {
     public class CompetitionsController : ApiController
     {
+        private ICompetitionRepository CompetitionRepository { get; set; }
 
-        // GET: api/Competitions
-        public IEnumerable<string> Get()
+        public CompetitionsController(ICompetitionRepository competitionRepository)
         {
-            return new string[] { "value1", "value2" };
+            CompetitionRepository = competitionRepository;
         }
 
-        // GET: api/Competitions/5
-        public string Get(int id)
+        public IHttpActionResult Get(int userId)
         {
-            return "value";
+            try
+            {
+                var competitions = CompetitionRepository.GetByUserId(userId);
+                return Ok(competitions);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
-
-        // POST: api/Competitions
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Competitions/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Competitions/5
-        public void Delete(int id)
-        {
-        }
-
-
     }
 }

@@ -4,6 +4,7 @@
     {
         int CorrectOutcomes { get; }
         int CorrectScores { get; }
+        int IncorrectOutcomes { get; }
         int MissedPredictions { get; }
         string PlayerName { get; }
         int Position { get; set; }

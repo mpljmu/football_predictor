@@ -10,9 +10,12 @@ namespace FootballPredictor.App_Start
     using FootballPredictor.Models.Connections;
     using FootballPredictor.Models.Loggers;
     using FootballPredictor.Models.People;
+    using FootballPredictor.Repositories.Competitions;
     using FootballPredictor.Repositories.CompetitionSeason;
     using FootballPredictor.Repositories.Fixtures;
     using FootballPredictor.Repositories.Predictions;
+    using FootballPredictor.Repositories.Seasons;
+    using FootballPredictor.Repositories.Users;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
@@ -71,10 +74,13 @@ namespace FootballPredictor.App_Start
             kernel.Bind<IDatabaseConnection>().To<SqlServerDatabaseConnection>();
             kernel.Bind<ILogger>().To<DatabaseLogger>();
             kernel.Bind<IPlayer>().To<Player>();
-            kernel.Bind<IFixtureRepository>().To<FixtureRepository>();
-            kernel.Bind<ICompetitionSeasonPlayersRepository>().To<CompetitionSeasonPlayersRepository>();
-            kernel.Bind<ICompetitionSeasonFixturesRepository>().To<CompetitionSeasonFixturesRepository>();
+            kernel.Bind<IFixturesRepository>().To<FixturesRepository>();
+            kernel.Bind<IPlayerRepository>().To<PlayerRepository>();
             kernel.Bind<IPredictionRepository>().To<PredictionRepository>();
+            kernel.Bind<ICompetitionSeasonRepository>().To<CompetitionSeasonRepository>();
+            kernel.Bind<IUserRepository>().To<UserRepository>();
+            kernel.Bind<ICompetitionRepository>().To<CompetitionRepository>();
+            kernel.Bind<ISeasonRepository>().To<SeasonRepository>();
         }        
     }
 }

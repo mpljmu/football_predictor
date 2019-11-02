@@ -11,6 +11,7 @@ namespace FootballPredictor.Models.Predictions
     {
         CorrectScore,
         CorrectOutcome,
-        IncorrectOutcome
+        IncorrectOutcome,
+        NoFixtureScore
     }
 }

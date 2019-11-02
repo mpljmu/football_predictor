@@ -1,6 +1,7 @@
 ﻿using FootballPredictor.Models.Competitions;
 using FootballPredictor.Models.People;
 using FootballPredictor.Repositories.CompetitionSeason;
+using FootballPredictor.Repositories.Predictions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,14 @@ namespace FootballPredictor.Controllers.CompetitionSeason
 {
     public class PlayersController : ApiController
     {
-        private ICompetitionSeasonPlayersRepository CompetitionSeasonPlayerRepository { get; set; }
+        private IPlayerRepository CompetitionSeasonPlayerRepository { get; set; }
+        private IPredictionRepository PredictionRepository { get; set; }
 
 
-        public PlayersController(ICompetitionSeasonPlayersRepository competitionSeasonPlayerRepository)
+        public PlayersController(IPlayerRepository playerRepository, IPredictionRepository predictionRepository)
         {
-            CompetitionSeasonPlayerRepository = competitionSeasonPlayerRepository;
-
+            CompetitionSeasonPlayerRepository = playerRepository;
+            PredictionRepository = predictionRepository;
         }
 
 

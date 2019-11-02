@@ -23,15 +23,47 @@ namespace FootballPredictor.Models.People
         }
         public IPassword Password { private get; set; }
         public bool Active { get; set; }
+        public string EmailAddress { get; private set; }
         public bool IsAdministrator { get; set; }
 
 
+        public User(int id)
+        {
+            Id = id;
+        }
         public User(int id, string username, string forename, string surname)
         {
             Id = id;
             Username = username;
             Forename = forename;
             Surname = surname;
+        }
+        public User(int id, string username, bool active, string forename, string surname, string emailAddress)
+        {
+            Id = id;
+            Username = username;
+            Active = active;
+            Forename = forename;
+            Surname = surname;
+            EmailAddress = emailAddress;
+        }
+        public User(int id, string username, bool active, string forename, string surname, string emailAddress, IPassword password)
+        {
+            Id = id;
+            Username = username;
+            Active = active;
+            Forename = forename;
+            Surname = surname;
+            EmailAddress = emailAddress;
+            Password = password;
+        }
+
+
+        public bool Authenticate(string textPassword)
+        {
+            var passwordValid = Password.CheckPassword(textPassword);
+            // Any other required methods to authenticate a user
+            return passwordValid;
         }
     }
 }

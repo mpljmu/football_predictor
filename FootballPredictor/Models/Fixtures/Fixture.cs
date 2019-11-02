@@ -62,11 +62,11 @@ namespace FootballPredictor.Models.Fixtures
             Id = id;
             Completed = completed;
         }
-        public Fixture(int id, DateTime date, bool completed)
+        public Fixture(int id, bool completed, DateTime date)
         {
             Id = id;
-            Date = date;
             Completed = completed;
+            Date = date;
         }
 
     }

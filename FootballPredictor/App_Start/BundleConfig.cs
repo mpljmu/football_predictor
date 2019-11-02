@@ -19,9 +19,27 @@ namespace FootballPredictor
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap/css").Include(
+                      "~/Content/bootstrap.min.css"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/Content/Authenticated/Models/js").Include(
+                    "~/Scripts/Models/Applications/Application.js",
+                      "~/Scripts/Models/Fixtures/Fixture.js",
+                      "~/Scripts/Models/Fixtures/FixtureScore.js",
+                      "~/Scripts/Models/Competitions/Competitions.js",
+                      "~/Scripts/Models/Seasons/Season.js",
+                      "~/Scripts/Models/CompetitionSeason/Season.js",
+                      "~/Scripts/Models/CompetitionSeason/CompetitionSeason.js",
+                      "~/Scripts/Models/CompetitionSeason/CompetitionSeasonFixture.js"
+                      )
+            );
+
+            bundles.Add(new ScriptBundle("~/Content/Authenticated/js").Include(
+                      "~/Scripts/Authenticated/Authenticated.js"));
         }
     }
 }

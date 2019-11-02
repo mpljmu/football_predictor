@@ -8,5 +8,8 @@
         bool IsAdministrator { get; set; }
         IPassword Password { set; }
         string Username { get; }
+
+
+        bool Authenticate(string textPassword);
     }
 }

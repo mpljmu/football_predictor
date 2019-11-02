@@ -10,10 +10,10 @@ namespace FootballPredictor.Controllers.Fixtures
 {
     public class FixtureDateController : ApiController
     {
-        private IFixtureRepository FixtureRepository { get; set; }
+        private IFixturesRepository FixtureRepository { get; set; }
 
         
-        public FixtureDateController(IFixtureRepository fixtureRepository)
+        public FixtureDateController(IFixturesRepository fixtureRepository)
         {
             FixtureRepository = fixtureRepository;
         }

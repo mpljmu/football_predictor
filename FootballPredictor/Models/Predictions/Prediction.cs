@@ -27,11 +27,6 @@ namespace FootballPredictor.Models.Predictions
         {
             Id = id;
         }
-        public Prediction(int id, IPredictionScore score)
-        {
-            Id = id;
-            Score = score;
-        }
         public Prediction(int id, IPlayer player, IFixture fixture, IPredictionScore score)
         {
             Id = id;
